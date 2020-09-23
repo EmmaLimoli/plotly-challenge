@@ -19,7 +19,7 @@
 
 // function to call on samples.json and pulling out top 10
 function dataSamples (id) {
-    d3.json("./data/samples.json").then((data) => {
+    d3.json("./static/js/samples.json").then((data) => {
         console.log(data);
     // create bar horo chart, drop down menu, display top 10 OTUs
      // display 10 OTUs   
