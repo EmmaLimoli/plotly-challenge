@@ -13,11 +13,12 @@
 // display the key pair from the JSON metadata
 // update the plots any time that a new sample is selected
 
-d3.json("./static/js/samples.json", function(metadata) {
-    console.log(metadata [0]);
-});
+// d3.json("./static/js/samples.json", function(metadata) {
+//     console.log(metadata);
+// });
 
 // function to call on samples.json and pulling out top 10
+// try running datasamples id type  940
 function dataSamples(id) {
     d3.json("./static/js/samples.json").then((data) => {
         console.log(data);
@@ -26,8 +27,8 @@ function dataSamples(id) {
         var wfreq = data.metadata.map(wash => wash.wfreq)
         console.log(`test${wfreq}`);
     // filter out top 10 OTUs
-        var filterOtus = data.samples.filter(otus => otus.id.toString() === id, [0]);
-        console.log(samples);
+        var filterOtus = data.samples.filter(otus => otus.id.toString() === id) [0];
+        console.log(filterOtus);
     // sort and slice out top 10 use sample_values
         var sort = filterOtus.sample_values.reverse()
         console.log(sort);
@@ -38,7 +39,6 @@ function dataSamples(id) {
 
     });
 }
-
 
     // drop down menu
     // horo bar chart
