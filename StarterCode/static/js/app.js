@@ -29,7 +29,7 @@ function dataSamples(id) {
     // // filter out top 10 OTUs
     var filters = data.samples.filter(otu => otu.id); 
     console.log(filters);
-    // // sort and slice out top 10 use  otu_ids
+    // // sort and slice out top 10 use  otu_ids, xaxis is otuids
     // not getting right numbers
     // sort
     filters.sort(function compareFunction(firstNum, secondNum) {
@@ -51,15 +51,18 @@ function dataSamples(id) {
         // slice
     var sv = sampleValues.slice(0, 10);
     console.log(sv);
+    // create hovertext with otu_labels
 
-    // drop down menu
+  
     // horo bar chart
     // create bar chart first
      // create trace
     var trace = {
         x: otuIds,
-        y: sampleValues,
-        type: "bar"
+        y: sv,
+        type: "bar",
+        color: "red",
+        orientation: "h"
     };
 
         // create data
@@ -68,13 +71,51 @@ function dataSamples(id) {
         // 
     var layout = {
         title: "OTU IDs and Sample Values",
-        xaxis: { title: "OTU IDs"},
-        yaxis: { title: "Sample Values"}
+        yaxis: {
+            tickermode: "linear",
+        },
+        margin: {
+            l: 75,
+            r: 75,
+            t: 50,
+            b: 40
+        }
     };
-
+    
     Plotly.newPlot("bar", data, layout);
+// print out function name to put in html doc
+dataSamples();
+
+    // create bubble chart
+
+
 
     });
 }
+// create an event to pull the different data when the dropdown is clicked 
+
+// create new function to create dropdown menu
+      // drop down menu, 
+    //   display metadata in demographic info
+    //  display key-value pair for metadata object
+function init() {
+    // create a variable for d3.select seldataset
+    var dropdownMenu = d3.select("#selDataset");
+    // use above filepath
+    d3.json("./static/js/samples.json").then((data) => {
+        console.log(data);
+        // call on the names for the ids, use foreach as a loop
+        data.names.forEach(function(name) {
+            // use the dropdown menu and add on to the end of the list, use text to print name
+            dropdownMenu.append("option").text(name).property("value")
+        });
+        // call on function and print in the dropdown
+        dataSamples(data.names[0]);
+    });
+}
+
+init();
+   
+
 
 
