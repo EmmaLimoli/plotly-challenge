@@ -21,25 +21,60 @@
 // try running datasamples id type  940
 function dataSamples(id) {
     d3.json("./static/js/samples.json").then((data) => {
-        console.log(data);
+    console.log(data);
     // create bar horo chart, drop down menu, display top 10 OTUs
-     // display 10 OTUs   
-        var wfreq = data.metadata.map(wash => wash.wfreq)
-        console.log(`test${wfreq}`);
-    // filter out top 10 OTUs
-        var filterOtus = data.samples.filter(otus => otus.id.toString() === id) [0];
-        console.log(filterOtus);
-    // sort and slice out top 10 use sample_values
-        var sort = filterOtus.sample_values.reverse()
-        console.log(sort);
-    // slice
-        var slice = sort.slice(0,10)
-        console.log(slice);
-        console.log(dataSamples);
+     // display 10 OTUs  
+    var wfreq = data.metadata.map(wash => wash.wfreq)
+    console.log(`Washing frequency: ${wfreq}`);
+    // // filter out top 10 OTUs
+    var filters = data.samples.filter(otu => otu.id); 
+    console.log(filters);
+    // // sort and slice out top 10 use  otu_ids
+    // not getting right numbers
+    // sort
+    filters.sort(function compareFunction(firstNum, secondNum) {
+        return firstNum - secondNum;
+    });
+    console.log(filters);
+        // slice
+    var otuIds = filters.slice(0, 10);
+    console.log(otuIds);
+        // filter through sample values
+        // not getting right numbers
+    var sampleValues = filters.filter(sampleV => sampleV.sample_values);
+    console.log(sampleValues);
+        // sort
+    sampleValues.sort(function compareFunction(firstNum, secondNum) {
+        return secondNum - firstNum;
+    });
+    console.log(sampleValues);
+        // slice
+    var sv = sampleValues.slice(0, 10);
+    console.log(sv);
+
+    // drop down menu
+    // horo bar chart
+    // create bar chart first
+     // create trace
+    var trace = {
+        x: otuIds,
+        y: sampleValues,
+        type: "bar"
+    };
+
+        // create data
+    var data = [trace];
+
+        // 
+    var layout = {
+        title: "OTU IDs and Sample Values",
+        xaxis: { title: "OTU IDs"},
+        yaxis: { title: "Sample Values"}
+    };
+
+    Plotly.newPlot("bar", data, layout);
 
     });
 }
 
-    // drop down menu
-    // horo bar chart
-    // var trace1 = 
+
