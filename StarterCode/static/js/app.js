@@ -24,65 +24,77 @@ function dataSamples(id) {
     console.log(data);
     // create bar horo chart, drop down menu, display top 10 OTUs
      // display 10 OTUs  
-    var wfreq = data.metadata.map(wash => wash.wfreq)
-    console.log(`Washing frequency: ${wfreq}`);
+    // var wfreq = data.metadata.map(wash => wash.wfreq)
+    // console.log(`Washing frequency: ${wfreq}`);
+    // drill down to ids
+    var otI  = data.samples.map(oi => oi.id)
+    console.log(`IDS: ${otI}`);
+    // drill down to otu_ids
+    var otIfinal = data.samples.map(otuID => otuID.otu_ids)
+    console.log(`OTU IDS:${otIfinal}`)
+
+    // var topTen = data.samples.map(o => o.otu_ids === otu_ids) [0];
+    // console.log(`final:${topTen}`)
     // // filter out top 10 OTUs
-    var filters = data.samples.filter(otu => otu.id); 
-    console.log(filters);
+    // var filters = otI.filter(otu => otu.otu_ids); 
+    // console.log(filters);
     // // sort and slice out top 10 use  otu_ids, xaxis is otuids
     // not getting right numbers
     // sort
-    filters.sort(function compareFunction(firstNum, secondNum) {
-        return firstNum - secondNum;
-    });
-    console.log(filters);
-        // slice
-    var otuIds = filters.slice(0, 10);
-    console.log(otuIds);
-        // filter through sample values
-        // not getting right numbers
-    var sampleValues = filters.filter(sampleV => sampleV.sample_values);
+    // filters.sort(function compareFunction(firstNum, secondNum) {
+    //     return firstNum - secondNum;
+    // });
+    // console.log(filters);
+    //     // slice
+    var firstOIDs = otIfinal.slice(0, 10);
+    console.log(firstOIDs);
+    //     // filter through sample values
+    //     // not getting right numbers
+    var sampleValues = data.samples.map(sampleV => sampleV.sample_values);
     console.log(sampleValues);
-        // sort
+    //     // sort
     sampleValues.sort(function compareFunction(firstNum, secondNum) {
         return secondNum - firstNum;
     });
     console.log(sampleValues);
-        // slice
-    var sv = sampleValues.slice(0, 10);
+    //     // slice
+    var sv = sampleValues.slice(0, 1);
     console.log(sv);
+
+    var svFinal = sv.slice(0,10);
+    console.log(svFinal)
     // create hovertext with otu_labels
 
   
     // horo bar chart
     // create bar chart first
      // create trace
-    var trace = {
-        x: otuIds,
-        y: sv,
-        type: "bar",
-        color: "red",
-        orientation: "h"
-    };
+    // var trace = {
+    //     x: otuIds,
+    //     y: sv,
+    //     type: "bar",
+    //     color: "red",
+    //     orientation: "h"
+    // };
 
-        // create data
-    var data = [trace];
+    //     // create data
+    // var data = [trace];
 
-        // 
-    var layout = {
-        title: "OTU IDs and Sample Values",
-        yaxis: {
-            tickermode: "linear",
-        },
-        margin: {
-            l: 75,
-            r: 75,
-            t: 50,
-            b: 40
-        }
-    };
+    //     // 
+    // var layout = {
+    //     title: "OTU IDs and Sample Values",
+    //     yaxis: {
+    //         tickermode: "linear",
+    //     },
+    //     margin: {
+    //         l: 75,
+    //         r: 75,
+    //         t: 50,
+    //         b: 40
+    //     }
+    // };
     
-    Plotly.newPlot("bar", data, layout);
+    // Plotly.newPlot("bar", data, layout);
 // print out function name to put in html doc
 dataSamples();
 
@@ -92,12 +104,23 @@ dataSamples();
 
     });
 }
+   //   display metadata in demographic info
+   //  display key-value pair for metadata object
 // create an event to pull the different data when the dropdown is clicked 
+// function info(id) {
+//     d3.json("./static/js/samples.json").then((data) => {
+//         var metadata = data.metadata;
+//         console.log(metadata);
+//         var result = metadata.filter(i => i.id); 
+//         var demo = d3.select("#sample-metadata");
+//         demo.html("")
+//         Object.defineProperties(result).forEach((key) => {
+//             demo.append("h5").text(key[0])
+//         });
+// })
 
 // create new function to create dropdown menu
       // drop down menu, 
-    //   display metadata in demographic info
-    //  display key-value pair for metadata object
 function init() {
     // create a variable for d3.select seldataset
     var dropdownMenu = d3.select("#selDataset");
@@ -111,6 +134,7 @@ function init() {
         });
         // call on function and print in the dropdown
         dataSamples(data.names[0]);
+        // info(data.metadata);
     });
 }
 
