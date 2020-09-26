@@ -118,6 +118,30 @@ function dataSamples(id) {
     });
 };
 
+   //   display metadata in demographic info
+   //  display key-value pair for metadata object
+// create an event to pull the different data when the dropdown is clicked 
+// function optionChanged(newSample) {
+//     buildCharts(newSample);
+//     buildMetadata(newSample)
+// }
+
+function demoInfo() {
+    d3.json("./static/js/samples.json").then((data) => {
+        var metadata = data.metadata;
+        console.log(metadata);
+        var resultInfo = metadata.id.map(d => d.id) 
+        console.log(`test${resultInfo}`);
+        
+        // var demo = d3.select("#sample-metadata");
+        // demo.html("")
+        // Object.entries(result).forEach((key) => {
+        //     demo.append("h5").text(key[0])
+        // });
+    });
+}
+
+
 // create new function to create dropdown menu
       // drop down menu, 
 function init() {
@@ -133,9 +157,10 @@ function init() {
         });
             // call on function and print in the dropdown
         dataSamples(data.names[0]);
-            // info(data.metadata);
-        });
-    }
+        // demoInfo(data.names[0]);
+    });
+}
     
 init();
-dataSamples();
+demoInfo();
+// dataSamples();
