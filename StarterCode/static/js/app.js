@@ -37,7 +37,6 @@ function dataSamples(id) {
     console.log(oidsSlice);
 
       //     // filter through sample values
-    //     // not getting right numbers
     var sampleValues = data.samples.map(sampleV => sampleV.sample_values);
     console.log(`sample values: ${sampleValues}`);
    // slice
@@ -49,6 +48,8 @@ function dataSamples(id) {
 
     var sampleSlice = firstSample.slice(0, 10);
     console.log(sampleSlice);
+
+    // labels
 
     var lab = data.samples.map(l => l.otu_labels)
     console.log(`labels: ${lab}`);
@@ -128,17 +129,27 @@ function dataSamples(id) {
 
 function demoInfo() {
     d3.json("./static/js/samples.json").then((data) => {
-        var metadata = data.metadata;
-        console.log(metadata);
-        var resultInfo = metadata.id.map(d => d.id) 
-        console.log(`test${resultInfo}`);
-        
-        // var demo = d3.select("#sample-metadata");
-        // demo.html("")
-        // Object.entries(result).forEach((key) => {
-        //     demo.append("h5").text(key[0])
-        // });
+        var meta = data.metadata;
+        console.log(meta)
+        var resultInfo = meta.filter(i => i.id === 940);
+        console.log(resultInfo);
+        const test = resultInfo[0];
+        console.log(test);
+        // var resultInfo = metadata.filter(m => m.id === metadata);
+        // console.log(`test ${resultInfo}`);
+        // print on html doc
+        var demo = d3.select("#sample-metadata");
+        console.log(demo);
+        demo.html("")
+        Object.entries(test).forEach((key) => {
+            demo.append("h5").text(key[0].toUpperCase() + ": " + key[1] + "\n");
+        });
     });
+}
+// link to html doc
+function optionChanged(id) {
+    dataSamples(id);
+    demoInfo(id);
 }
 
 
@@ -157,10 +168,10 @@ function init() {
         });
             // call on function and print in the dropdown
         dataSamples(data.names[0]);
-        // demoInfo(data.names[0]);
+        demoInfo(data.names[0]);
     });
 }
     
 init();
-demoInfo();
+// demoInfo();
 // dataSamples();
