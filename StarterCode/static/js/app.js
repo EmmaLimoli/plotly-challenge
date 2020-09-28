@@ -22,55 +22,69 @@ function dataSamples(id) {
      // display 10 OTUs  
     // drill down to ids
     var otI  = data.samples.map(oi => oi.id)
-    console.log(`IDS: ${otI}`);
+    var otI = data.samples.filter(oi => {return oi.id == id})
+    otIfinal = otI[0];
+    console.log("IDS: ",otIfinal);
     // drill down to otu_ids
-    var otIfinal = data.samples.map(otuID => otuID.otu_ids)
-    console.log(`OTU IDS:${otIfinal}`)
+    // var otIfinal = data.samples.map(otuID => otuID.otu_ids)
+    // console.log(`OTU IDS:${otIfinal}`)
          // slice
-    var firstOIDs = otIfinal.slice(0, 1);
-    console.log(firstOIDs);
+    // var firstOIDs = otIfinal.slice(0, 1);
+    // console.log(firstOIDs);
     
-    const fOIDs = firstOIDs[0];
-    console.log(fOIDs);
-    
-    var oidsSlice = fOIDs.slice(0, 10);
+    // const fOIDs = firstOIDs[0];
+    // console.log(fOIDs);
+    // split this into bar and bubble
+    var oidsSlice = otIfinal.otu_ids.slice(0, 10).map(idLabel => `OTU ${idLabel}`);
     console.log(oidsSlice);
 
-      //     // filter through sample values
-    var sampleValues = data.samples.map(sampleV => sampleV.sample_values);
-    console.log(`sample values: ${sampleValues}`);
-   // slice
-    var sv = sampleValues.slice(0, 1);
-    console.log(sv);
+    var oidsSliceBubble = otIfinal.otu_ids.slice(0, 10)
 
-    const firstSample = sv[0];
-    console.log(firstSample);
-
-    var sampleSlice = firstSample.slice(0, 10);
+    var sampleSlice = otIfinal.sample_values.slice(0, 10);
     console.log(sampleSlice);
 
     // labels
 
-    var lab = data.samples.map(l => l.otu_labels)
-    console.log(`labels: ${lab}`);
-
-    var label = lab.slice(0,1);
-    console.log(label)
-
-    const labe = label[0];
-    console.log(labe);
-
-    var labels = labe.slice(0, 10);
-    console.log(labels);
+    var labels = otIfinal.otu_labels.slice(0, 10);
+    console.log(`labels: ${labels}`);
 
 
+      //     // filter through sample values
+//     var sampleValues = data.samples.map(sampleV => sampleV.sample_values);
+//     console.log(`sample values: ${sampleValues}`);
+//    // slice
+//     var sv = sampleValues.slice(0, 1);
+//     console.log(sv);
+
+//     const firstSample = sv[0];
+//     console.log(firstSample);
+
+    
+
+    // labels
+
+    // var lab = data.samples.map(l => l.otu_labels)
+    // console.log(`labels: ${lab}`);
+
+    // var label = lab.slice(0,1);
+    // console.log(label)
+
+    // const labe = label[0];
+    // console.log(labe);
+
+    // var labels = labe.slice(0, 10);
+    // console.log(labels);
+
+
+    // put in a separate function
     // horo bar chart
     // create bar chart first
      // create trace
+    //  plotly is interupting data incorrectly
      var trace = {
-        x: oidsSlice,
-        y: sampleSlice,
-        text: labels,
+        y: oidsSlice.reverse(),
+        x: sampleSlice.reverse(),
+        text: labels.reverse(),
         marker: {
             color: "red"},
         type: "bar",
@@ -97,14 +111,16 @@ function dataSamples(id) {
     Plotly.newPlot("bar", data, layout);
 
     //  create bubble chart
+    // put in the separate function
     var trace1 = {
-        x: oidsSlice,
+        x: oidsSliceBubble,
         y: sampleSlice,
         text: labels,
         mode: 'markers',
         marker: {
          size: sampleSlice,
-         color: oidsSlice,
+         colorscale: "rainbow",
+         color: oidsSliceBubble,
         }
     };
 
@@ -112,7 +128,7 @@ function dataSamples(id) {
 
     var layout1 = {
         xaxis: {title: "OTU ID"},
-        title: "Belly Button"
+        title: "Belly Button Biodiversity Bubble Chart"
     };
 
     Plotly.newPlot("bubble", data1, layout1);
@@ -127,11 +143,11 @@ function dataSamples(id) {
 //     buildMetadata(newSample)
 // }
 
-function demoInfo() {
+function demoInfo(id) {
     d3.json("./static/js/samples.json").then((data) => {
         var meta = data.metadata;
         console.log(meta)
-        var resultInfo = meta.filter(i => i.id === 940);
+        var resultInfo = meta.filter(i => {return i.id == id});
         console.log(resultInfo);
         const test = resultInfo[0];
         console.log(test);
